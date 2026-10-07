@@ -33,9 +33,9 @@ use Symfony\Component\Mercure\RemoteHubInterface;
 /**
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class MercureExtensionTest extends TestCase
+final class MercureExtensionTest extends TestCase
 {
-    public function testExtensionMinimum()
+    public function testExtensionMinimum(): void
     {
         $config = [
             'mercure' => [
@@ -76,7 +76,7 @@ class MercureExtensionTest extends TestCase
         $this->assertFalse($container->hasAlias(\Symfony\Component\Mercure\Publisher::class));
     }
 
-    public function testExtension()
+    public function testExtension(): void
     {
         $config = [
             'mercure' => [
@@ -201,7 +201,7 @@ class MercureExtensionTest extends TestCase
         $this->assertArrayNotHasKey('Symfony\Component\Mercure\Jwt\TokenFactoryInterface $demoTokenFactory', $container->getAliases());
     }
 
-    public function testNamedHubsShorthandConfig()
+    public function testNamedHubsShorthandConfig(): void
     {
         $config = [
             'mercure' => [
@@ -243,7 +243,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame('__Secure-mercure_access_token', $registry->getHub()->getCookieName());
     }
 
-    public function testProfilerRegistersTraceableHubOnly()
+    public function testProfilerRegistersTraceableHubOnly(): void
     {
         $config = [
             'mercure' => [
@@ -265,7 +265,7 @@ class MercureExtensionTest extends TestCase
         $this->assertTrue($container->hasDefinition('data_collector.mercure'));
     }
 
-    public function testExtensionBuiltin()
+    public function testExtensionBuiltin(): void
     {
         $config = [
             'mercure' => [
@@ -302,7 +302,7 @@ class MercureExtensionTest extends TestCase
      * The report in #120: the recipe's "%env(default::MERCURE_URL)%" resolves to null under
      * Docker Compose, which used to reach Hub::__construct() and fail on its string $url.
      */
-    public function testExtensionBuiltinThroughAnEmptyUrlEnvironmentVariable()
+    public function testExtensionBuiltinThroughAnEmptyUrlEnvironmentVariable(): void
     {
         $config = [
             'mercure' => [
@@ -324,7 +324,7 @@ class MercureExtensionTest extends TestCase
         $this->assertNull($definition->getArgument(0));
     }
 
-    public function testEmptyUrlDoesNotAliasRemoteHubInterface()
+    public function testEmptyUrlDoesNotAliasRemoteHubInterface(): void
     {
         $config = [
             'mercure' => [
@@ -346,7 +346,7 @@ class MercureExtensionTest extends TestCase
         $this->assertArrayNotHasKey('Symfony\Component\Mercure\RemoteHubInterface $default', $container->getAliases());
     }
 
-    public function testExtensionProtocolVersion10()
+    public function testExtensionProtocolVersion10(): void
     {
         $config = [
             'mercure' => [
@@ -368,7 +368,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame('custom_cookie', $container->getDefinition('mercure.hub.default')->getArgument(5));
     }
 
-    public function testExtensionWithCustomHttpClient()
+    public function testExtensionWithCustomHttpClient(): void
     {
         $config = [
             'mercure' => [
@@ -390,7 +390,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame(ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $httpClient->getInvalidBehavior());
     }
 
-    public function testExtensionDefaultsToGlobalHttpClient()
+    public function testExtensionDefaultsToGlobalHttpClient(): void
     {
         $config = [
             'mercure' => [
@@ -411,7 +411,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame(ContainerInterface::IGNORE_ON_INVALID_REFERENCE, $httpClient->getInvalidBehavior());
     }
 
-    public function testDebugModeDefaultsToPrefixLessCookieName()
+    public function testDebugModeDefaultsToPrefixLessCookieName(): void
     {
         $config = [
             'mercure' => [
@@ -442,7 +442,7 @@ class MercureExtensionTest extends TestCase
         $this->assertNull($container->getDefinition('mercure.hub.legacy')->getArgument(5));
     }
 
-    public function testLegacyHubUsesLcobucciFactoryWithLegacyProtocolVersion()
+    public function testLegacyHubUsesLcobucciFactoryWithLegacyProtocolVersion(): void
     {
         $config = [
             'mercure' => [
@@ -468,7 +468,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame(ProtocolVersion::Legacy, $definition->getArgument(4));
     }
 
-    public function testV1HubUsesLcobucciFactoryWithV1ProtocolVersion()
+    public function testV1HubUsesLcobucciFactoryWithV1ProtocolVersion(): void
     {
         $config = [
             'mercure' => [
@@ -497,7 +497,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame(ProtocolVersion::V1, $definition->getArgument(4));
     }
 
-    public function testV1HubWithSecretButWithoutRequiredClaimsFailsAtCompileTime()
+    public function testV1HubWithSecretButWithoutRequiredClaimsFailsAtCompileTime(): void
     {
         $config = [
             'mercure' => [
@@ -520,7 +520,7 @@ class MercureExtensionTest extends TestCase
         (new MercureExtension())->load($config, new ContainerBuilder(new ParameterBag(['kernel.debug' => false])));
     }
 
-    public function testLegacyHubWithoutClaimsIsNotWrappedInDefaultClaims()
+    public function testLegacyHubWithoutClaimsIsNotWrappedInDefaultClaims(): void
     {
         $config = [
             'mercure' => [
@@ -544,7 +544,7 @@ class MercureExtensionTest extends TestCase
         $this->assertFalse($container->hasDefinition('mercure.hub.default.jwt.factory.default_claims'));
     }
 
-    public function testLegacyHubWithExplicitClaimsIsWrappedWithoutAudDefault()
+    public function testLegacyHubWithExplicitClaimsIsWrappedWithoutAudDefault(): void
     {
         $config = [
             'mercure' => [
@@ -572,7 +572,7 @@ class MercureExtensionTest extends TestCase
         );
     }
 
-    public function testV1HubUsesWebTokenFactoryFromJwksUriWhenConfigured()
+    public function testV1HubUsesWebTokenFactoryFromJwksUriWhenConfigured(): void
     {
         $config = [
             'mercure' => [
@@ -603,7 +603,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame('HS256', $definition->getArgument('$algorithm'));
     }
 
-    public function testSecretHubDefaultsToTheLcobucciAlgorithmName()
+    public function testSecretHubDefaultsToTheLcobucciAlgorithmName(): void
     {
         $config = [
             'mercure' => [
@@ -622,7 +622,7 @@ class MercureExtensionTest extends TestCase
         $this->assertSame('hmac.sha256', $container->getDefinition('mercure.hub.default.jwt.factory')->getArgument(1));
     }
 
-    public function testJwksUriWithoutWebTokenLibraryThrows()
+    public function testJwksUriWithoutWebTokenLibraryThrows(): void
     {
         $config = [
             'mercure' => [
@@ -647,7 +647,7 @@ class MercureExtensionTest extends TestCase
         (new MercureExtension(webTokenLibraryInstalled: false))->load($config, $container);
     }
 
-    public function testV1HubWithSecretAndClaimsMintsATokenEndToEnd()
+    public function testV1HubWithSecretAndClaimsMintsATokenEndToEnd(): void
     {
         if (!class_exists(Key\InMemory::class)) {
             $this->markTestSkipped('requires lcobucci/jwt.');
@@ -681,7 +681,7 @@ class MercureExtensionTest extends TestCase
         $this->assertMatchesRegularExpression('/^[\w-]+\.[\w-]+\.[\w-]+$/', $jwt);
     }
 
-    public function testV1HubDefaultsAudienceToTheHubUrl()
+    public function testV1HubDefaultsAudienceToTheHubUrl(): void
     {
         if (!class_exists(Key\InMemory::class)) {
             $this->markTestSkipped('requires lcobucci/jwt.');
@@ -711,7 +711,7 @@ class MercureExtensionTest extends TestCase
         );
     }
 
-    public function testV1HubFactoryIncludesDefaultClaimsForDirectCallers()
+    public function testV1HubFactoryIncludesDefaultClaimsForDirectCallers(): void
     {
         if (!class_exists(Key\InMemory::class)) {
             $this->markTestSkipped('requires lcobucci/jwt.');

@@ -7,11 +7,6 @@ parameters:
 	bootstrapFiles:
 		- vendor/bin/.phpunit/phpunit/vendor/autoload.php
 	ignoreErrors:
-		-
-			message: "#^Method .*::test.*\\(\\) has no return type specified\\.$#"
-			reportUnmatched: false
-			paths:
-				- tests/*
 		# the is_a() check dispatches between Twig 3 (class extensions) and Twig 4 (attribute
 		# extensions); whichever Twig version is installed, PHPStan sees its outcome as constant
 		-

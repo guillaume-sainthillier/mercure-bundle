@@ -20,9 +20,9 @@ use Symfony\Component\Mercure\Hub;
 use Symfony\Component\Mercure\Jwt\StaticTokenProvider;
 use Symfony\Component\Mercure\ProtocolVersion;
 
-class HubFactoryTest extends TestCase
+final class HubFactoryTest extends TestCase
 {
-    public function testUrlSelectsARemoteHub()
+    public function testUrlSelectsARemoteHub(): void
     {
         $hub = HubFactory::create(
             'https://demo.mercure.rocks/hub',
@@ -41,7 +41,7 @@ class HubFactoryTest extends TestCase
         $this->assertSame(ProtocolVersion::V1, $hub->getProtocolVersion());
     }
 
-    public function testUrlWithoutATokenProviderThrows()
+    public function testUrlWithoutATokenProviderThrows(): void
     {
         $this->expectException(\LogicException::class);
         $this->expectExceptionMessage('needs a JSON Web Token to publish with');
@@ -55,7 +55,7 @@ class HubFactoryTest extends TestCase
      *
      * @dataProvider provideEmptyUrls
      */
-    public function testAnEmptyUrlWithoutFrankenPhpThrows(?string $url)
+    public function testAnEmptyUrlWithoutFrankenPhpThrows(?string $url): void
     {
         if (\function_exists('mercure_publish')) {
             $this->markTestSkipped('FrankenPHP\'s built-in Mercure hub is available.');
@@ -80,7 +80,7 @@ class HubFactoryTest extends TestCase
      *
      * @preserveGlobalState disabled
      */
-    public function testAnEmptyUrlSelectsTheBuiltinHub(?string $url)
+    public function testAnEmptyUrlSelectsTheBuiltinHub(?string $url): void
     {
         require __DIR__.'/Fixtures/mercure_publish.php';
 
@@ -95,7 +95,7 @@ class HubFactoryTest extends TestCase
      *
      * @preserveGlobalState disabled
      */
-    public function testTheBuiltinHubWithoutAPublicUrlThrows()
+    public function testTheBuiltinHubWithoutAPublicUrlThrows(): void
     {
         require __DIR__.'/Fixtures/mercure_publish.php';
 

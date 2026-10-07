@@ -19,14 +19,14 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Mercure\ProtocolVersion;
 
-class ConfigurationTest extends TestCase
+final class ConfigurationTest extends TestCase
 {
     private function process(array $config): array
     {
         return (new Processor())->processConfiguration(new Configuration(), [$config]);
     }
 
-    public function testUrlAndPublicUrlDefaultToNull()
+    public function testUrlAndPublicUrlDefaultToNull(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -51,7 +51,7 @@ class ConfigurationTest extends TestCase
         $this->assertNull($config['hubs']['default']['url']);
     }
 
-    public function testProtocolVersionDefaultsToV1Value()
+    public function testProtocolVersionDefaultsToV1Value(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -66,7 +66,7 @@ class ConfigurationTest extends TestCase
         $this->assertNull($config['hubs']['default']['cookie_name']);
     }
 
-    public function testProtocolVersionAcceptsExplicit10()
+    public function testProtocolVersionAcceptsExplicit10(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -81,7 +81,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame(ProtocolVersion::V1, $config['hubs']['default']['protocol_version']);
     }
 
-    public function testProtocolVersionAcceptsEnumCase()
+    public function testProtocolVersionAcceptsEnumCase(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -96,7 +96,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame(ProtocolVersion::Legacy, $config['hubs']['default']['protocol_version']);
     }
 
-    public function testProtocolVersionRejectsInvalidValue()
+    public function testProtocolVersionRejectsInvalidValue(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -111,7 +111,7 @@ class ConfigurationTest extends TestCase
         ]);
     }
 
-    public function testCookieNameAcceptsExplicitValue()
+    public function testCookieNameAcceptsExplicitValue(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -126,7 +126,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame('custom_cookie', $config['hubs']['default']['cookie_name']);
     }
 
-    public function testJwtClaimsAreAcceptedAndPassedThrough()
+    public function testJwtClaimsAreAcceptedAndPassedThrough(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -141,7 +141,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame(['iss' => 'https://example.com', 'sub' => 'https://example.com'], $config['hubs']['default']['jwt']['claims']);
     }
 
-    public function testJwksUriAcceptedWithProtocolVersion10()
+    public function testJwksUriAcceptedWithProtocolVersion10(): void
     {
         $config = $this->process([
             'hubs' => [
@@ -157,7 +157,7 @@ class ConfigurationTest extends TestCase
         $this->assertSame('key1', $config['hubs']['default']['jwt']['key_id']);
     }
 
-    public function testJwksUriRejectedWithoutProtocolVersion10()
+    public function testJwksUriRejectedWithoutProtocolVersion10(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessageMatches('/jwt\.jwks_uri.*protocol_version: 1\.0/');
@@ -173,7 +173,7 @@ class ConfigurationTest extends TestCase
         ]);
     }
 
-    public function testJwksUriAndSecretAreMutuallyExclusive()
+    public function testJwksUriAndSecretAreMutuallyExclusive(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessageMatches('/jwt\.secret.*jwt\.jwks_uri/');
